@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -30,6 +31,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleOperationNotAllowedException(
             OperationNotAllowedException exception, HttpServletRequest request) {
         return buildErrorResponse(HttpStatus.FORBIDDEN, exception.getMessage(), request);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAuthenticationException(
+            AuthenticationException exception, HttpServletRequest request) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, "Email ou senha inválidos", request);
     }
 
     private ResponseEntity<ErrorResponseDTO> buildErrorResponse(

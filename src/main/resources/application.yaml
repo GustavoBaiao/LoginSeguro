@@ -7,3 +7,10 @@ spring:
       uuid: standard
     database: login_seguro
     uri: ${MONGODB_URI}
+
+  jwt:
+    secret: ${JWT_SECRET}
+    issuer: loginseguro
+    expiration: ${JWT_EXPIRATION:3600}
+    cookie:
+      secure: ${JWT_COOKIE_SECURE:true}

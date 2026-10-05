@@ -1,6 +1,7 @@
 package com.loginseguro.service;
 
 import com.loginseguro.dto.request.UserRequestDTO;
+import com.loginseguro.dto.request.UpdateUserRoleRequestDTO;
 import com.loginseguro.dto.response.UserResponseDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -19,4 +20,10 @@ public interface IUserService {
     UserResponseDTO findByEmail(String email);
 
     Page<UserResponseDTO> findAll(Pageable pageable);
+
+    void activate(UUID id);
+
+    void deactivate(UUID id);
+
+    void updateRole(UUID id, @NotNull @Valid UpdateUserRoleRequestDTO requestDTO);
 }

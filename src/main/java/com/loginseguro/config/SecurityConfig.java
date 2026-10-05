@@ -67,6 +67,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/auth/csrf").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/logout").permitAll()
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/users/{id}/activate", "/users/{id}/deactivate", "/users/{id}/role")
+                        .hasRole(RoleEnum.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/users")
                         .hasAnyRole(RoleEnum.MANAGER.name(), RoleEnum.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/users/me").authenticated()

@@ -1,3 +1,9 @@
 spring:
   application:
     name: loginseguro
+
+  mongodb:
+    representation:
+      uuid: standard
+    database: login_seguro
+    uri: ${MONGODB_URI}

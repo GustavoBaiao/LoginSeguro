@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: page('Erro', ~{::section})}">
+<head><title>Erro</title></head><body>
+<section class="card">
+    <h1 th:text="${'Erro ' + status}">Erro</h1>
+    <p th:text="${message != null ? message : 'Não foi possível concluir esta solicitação.'}"></p>
+    <a class="button" th:href="@{/}">Voltar ao início</a>
+</section></body></html>

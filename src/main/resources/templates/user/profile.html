@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: page('Meu perfil', ~{::section})}">
+<head><title>Meu perfil</title></head><body>
+<section class="card">
+    <h1>Meu perfil</h1>
+    <dl>
+        <dt>Nome</dt><dd th:text="${user.name()}"></dd>
+        <dt>Email</dt><dd th:text="${user.email()}"></dd>
+        <dt>Perfil</dt><dd th:text="${user.role()}"></dd>
+        <dt>Status</dt><dd th:text="${user.active() ? 'Ativo' : 'Inativo'}"></dd>
+        <dt>Cadastro</dt><dd th:text="${#temporals.format(user.createdAt(), 'dd/MM/yyyy HH:mm')}"></dd>
+    </dl>
+</section></body></html>

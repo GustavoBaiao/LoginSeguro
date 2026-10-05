@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" th:fragment="page(pageTitle, content)">
+<head th:replace="~{fragments/head :: head(${pageTitle})}"><title th:text="${pageTitle}"></title></head>
+<body>
+<a class="skip-link" href="#main-content">Ir para o conteúdo</a>
+<header th:replace="~{fragments/header :: header}"></header>
+<main id="main-content" class="container page-content" tabindex="-1">
+    <th:block th:replace="${content}"></th:block>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

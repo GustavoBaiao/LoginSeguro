@@ -14,6 +14,8 @@ public interface IUserService {
 
     UserResponseDTO findById(UUID id);
 
+    UserResponseDTO findCurrentUser();
+
     UserResponseDTO findByEmail(String email);
 
     Page<UserResponseDTO> findAll(Pageable pageable);

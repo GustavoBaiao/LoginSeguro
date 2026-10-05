@@ -31,6 +31,12 @@ public class UserController {
         return ResponseEntity.created(location).body(user);
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> findCurrentUser() {
+        var user = userService.findCurrentUser();
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> findById(@PathVariable UUID id) {
         var user = userService.findById(id);

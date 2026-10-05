@@ -8,6 +8,7 @@ import com.loginseguro.exception.UserNotFoundException;
 import com.loginseguro.mapper.IUserMapper;
 import com.loginseguro.repository.IUserRepository;
 import com.loginseguro.service.IUserService;
+import com.loginseguro.service.ICurrentActorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class UserService implements IUserService {
     private final IUserRepository userRepository;
     private final IUserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ICurrentActorService currentActorService;
 
     @Override
     public UserResponseDTO create(UserRequestDTO userRequestDTO) {
@@ -39,6 +41,13 @@ public class UserService implements IUserService {
     public UserResponseDTO findById(UUID id) {
         var user = findUserByIdOrThrow(id);
 
+        return toResponseDTO(user);
+    }
+
+    @Override
+    public UserResponseDTO findCurrentUser() {
+        var id = currentActorService.getCurrentUserId();
+        var user = findUserByIdOrThrow(id);
         return toResponseDTO(user);
     }
 

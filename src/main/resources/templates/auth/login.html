@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page('Entrar', ~{::section})}">
+<head><title>Entrar | LoginSeguro</title></head>
+<body>
+<section class="card auth-card" aria-labelledby="login-title">
+    <h1 id="login-title">Bem-vindo de volta</h1>
+    <p class="muted">Entre com seu email e senha para acessar sua conta.</p>
+    <div class="alert alert-success" role="status" th:if="${param.registered != null}">
+        Conta criada com sucesso. Você já pode entrar.
+    </div>
+    <div class="alert alert-success" role="status" th:if="${param.logout != null}">
+        Você saiu da sua conta.
+    </div>
+    <div class="alert alert-error" role="alert" th:if="${loginError != null}" th:text="${loginError}"></div>
+    <form class="form-stack" th:action="@{/login}" th:object="${loginRequestDTO}" method="post">
+        <div class="form-field">
+            <label for="email">Email</label>
+            <input id="email" type="email" th:field="*{email}" autocomplete="username" maxlength="255"
+                   required aria-describedby="email-error" th:attr="aria-invalid=${#fields.hasErrors('email')}">
+            <p id="email-error" class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+        </div>
+        <div class="form-field">
+            <label for="password">Senha</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" required
+                   aria-describedby="password-error" th:attr="aria-invalid=${#fields.hasErrors('password')}">
+            <p id="password-error" class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+        </div>
+        <button class="button button-full" type="submit">Entrar</button>
+    </form>
+    <p class="muted">Ainda não tem conta? <a th:href="@{/register}">Crie sua conta</a>.</p>
+</section>
+</body>
+</html>

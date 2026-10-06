@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<header class="site-header" th:fragment="header">
+    <div class="container header-content">
+        <a class="brand" th:href="@{/bem-vindo}" sec:authorize="isAuthenticated()">LoginSeguro</a>
+        <a class="brand" th:href="@{/login}" sec:authorize="isAnonymous()">LoginSeguro</a>
+        <nav class="site-nav" aria-label="Navegação principal">
+            <a th:href="@{/login}" sec:authorize="isAnonymous()">Entrar</a>
+            <a th:href="@{/register}" sec:authorize="isAnonymous()">Criar conta</a>
+            <a th:href="@{/bem-vindo}" sec:authorize="isAuthenticated()">Início</a>
+            <a th:href="@{/profile}" sec:authorize="isAuthenticated()">Meu perfil</a>
+            <a th:href="@{/users}" sec:authorize="hasAnyRole('MANAGER', 'ADMIN')">Usuários</a>
+            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
+                <button class="button button-secondary" type="submit">Sair</button>
+            </form>
+        </nav>
+    </div>
+</header>
+</body>
+</html>

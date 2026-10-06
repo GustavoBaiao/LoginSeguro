@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:replace="~{fragments/layout :: page('Detalhes do usuário', ~{::section})}">
+<head><title>Detalhes do usuário</title></head><body>
+<section class="card">
+    <h1 th:text="${user.name()}"></h1>
+    <p th:text="${user.email()}"></p>
+    <p th:text="${'Perfil: ' + user.role()}"></p>
+    <p th:text="${user.active() ? 'Ativo' : 'Inativo'}"></p>
+    <p class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}" role="status"></p>
+    <div class="user-management" sec:authorize="hasRole('ADMIN')">
+        <form id="user-role-form" class="form-stack" th:action="@{/users/{id}/role(id=${user.id()})}" method="post" th:object="${updateUserRoleRequestDTO}">
+            <div class="form-field">
+                <label for="role">Perfil</label>
+                <select id="role" th:field="*{role}"><option th:each="role : ${roles}" th:value="${role}" th:text="${role}"></option></select>
+                <p class="field-error" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></p>
+            </div>
+        </form>
+        <div class="actions user-management-actions">
+            <button class="button" type="submit" form="user-role-form">Salvar perfil</button>
+            <form th:if="${!user.active()}" th:action="@{/users/{id}/activate(id=${user.id()})}" method="post">
+                <button class="button" type="submit">Ativar usuário</button>
+            </form>
+            <form th:if="${user.active()}" th:action="@{/users/{id}/deactivate(id=${user.id()})}" method="post">
+                <button class="button button-secondary" type="submit">Desativar usuário</button>
+            </form>
+        </div>
+    </div>
+    <div class="details-navigation" sec:authorize="hasAnyRole('MANAGER', 'ADMIN')">
+        <a class="button button-secondary" th:href="@{/users}">Voltar à listagem</a>
+    </div>
+</section></body></html>

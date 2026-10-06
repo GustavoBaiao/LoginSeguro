@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page('Criar conta', ~{::section})}">
+<head><title>Criar conta | LoginSeguro</title></head>
+<body>
+<section class="card auth-card" aria-labelledby="register-title">
+    <h1 id="register-title">Crie sua conta</h1>
+    <p class="muted">Preencha seus dados para começar.</p>
+    <form class="form-stack" th:action="@{/register}" th:object="${userRequestDTO}" method="post">
+        <div class="form-field">
+            <label for="name">Nome</label>
+            <input id="name" type="text" th:field="*{name}" autocomplete="name" maxlength="150" required
+                   aria-describedby="name-error" th:attr="aria-invalid=${#fields.hasErrors('name')}">
+            <p id="name-error" class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+        </div>
+        <div class="form-field">
+            <label for="email">Email</label>
+            <input id="email" type="email" th:field="*{email}" autocomplete="username" maxlength="255" required
+                   aria-describedby="email-error" th:attr="aria-invalid=${#fields.hasErrors('email')}">
+            <p id="email-error" class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+        </div>
+        <div class="form-field">
+            <label for="password">Senha</label>
+            <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required
+                   aria-describedby="password-help password-error"
+                   th:attr="aria-invalid=${#fields.hasErrors('password')}">
+            <p id="password-help" class="form-help">Use pelo menos 8 caracteres, com letra maiúscula, minúscula, número e caractere especial.</p>
+            <p id="password-error" class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+        </div>
+        <button class="button button-full" type="submit">Criar conta</button>
+    </form>
+    <p class="muted">Já tem conta? <a th:href="@{/login}">Entre aqui</a>.</p>
+</section>
+</body>
+</html>

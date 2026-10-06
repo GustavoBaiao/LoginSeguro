@@ -1,19 +1,19 @@
 :root {
     color-scheme: light;
     --font-family: "Segoe UI", Arial, sans-serif;
-    --color-background: #f4f7fb;
+    --color-background: #f7f4fc;
     --color-surface: #ffffff;
-    --color-text: #17243a;
-    --color-muted: #52627a;
-    --color-primary: #2455c7;
-    --color-primary-hover: #1c439e;
+    --color-text: #281d3b;
+    --color-muted: #655675;
+    --color-primary: #7138b8;
+    --color-primary-hover: #57268f;
     --color-on-primary: #ffffff;
-    --color-border: #d4dce8;
-    --color-focus: #2455c7;
+    --color-border: #dfd5ec;
+    --color-focus: #7138b8;
     --color-success: #14603e;
     --color-success-background: #e9f6ef;
     --color-danger: #a52432;
     --color-danger-background: #fff0f1;
     --radius: 0.75rem;
-    --shadow: 0 8px 28px rgb(23 36 58 / 7%);
+    --shadow: 0 8px 28px rgb(40 29 59 / 7%);
 }

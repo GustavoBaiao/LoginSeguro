@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: page('Usuários', ~{::section})}">
+<head><title>Usuários</title></head><body>
+<section class="card">
+    <h1>Usuários</h1>
+    <p th:if="${users.empty}">Nenhum usuário encontrado nesta página.</p>
+    <div class="table-responsive" th:unless="${users.empty}">
+        <table><thead><tr><th>Nome</th><th>Email</th><th>Perfil</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody><tr th:each="user : ${users.content}">
+                <td th:text="${user.name()}"></td><td th:text="${user.email()}"></td>
+                <td th:text="${user.role()}"></td><td th:text="${user.active() ? 'Ativo' : 'Inativo'}"></td>
+                <td><a th:href="@{/users/{id}(id=${user.id()})}">Ver detalhes</a></td>
+            </tr></tbody>
+        </table>
+    </div>
+    <nav aria-label="Paginação">
+        <a th:if="${users.hasPrevious()}" th:href="@{/users(page=${users.number - 1},size=${users.size})}">Anterior</a>
+        <span th:text="${'Página ' + (users.number + 1) + ' — ' + users.totalElements + ' usuário(s)'}"></span>
+        <a th:if="${users.hasNext()}" th:href="@{/users(page=${users.number + 1},size=${users.size})}">Próxima</a>
+    </nav>
+</section></body></html>

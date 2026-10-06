@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: page('Boas-vindas', ~{::section})}">
+<head><title>Boas-vindas | LoginSeguro</title></head>
+<body>
+<section class="card" aria-labelledby="welcome-title">
+    <h1 id="welcome-title" th:text="${'Bem-vindo, ' + user.name() + '!'}">Bem-vindo!</h1>
+    <p>Você entrou com sucesso no LoginSeguro.</p>
+    <p class="muted">Use o menu para acessar as opções disponíveis para sua conta.</p>
+</section>
+</body>
+</html>

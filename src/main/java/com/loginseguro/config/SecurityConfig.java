@@ -8,6 +8,7 @@ import com.loginseguro.security.JwtAuthenticationFilter;
 import com.loginseguro.security.JwtCookieManager;
 import com.loginseguro.service.ISessionService;
 import java.util.function.Supplier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,12 +25,23 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Bean
+    public CookieCsrfTokenRepository csrfTokenRepository(
+            @Value("${spring.jwt.cookie.secure}") boolean secure) {
+        var repository = new CookieCsrfTokenRepository();
+        repository.setCookieName("loginseguro_csrf");
+        repository.setCookiePath("/");
+        repository.setCookieCustomizer(cookie -> cookie.httpOnly(true).secure(secure).sameSite("Lax"));
+        return repository;
+    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(
@@ -48,11 +60,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http, DaoAuthenticationProvider authenticationProvider,
             JwtCookieManager jwtCookieManager, ISessionService sessionService,
-            IUserRepository userRepository) throws Exception {
+            IUserRepository userRepository, CookieCsrfTokenRepository csrfTokenRepository) throws Exception {
         var jwtFilter = new JwtAuthenticationFilter(jwtCookieManager, sessionService, userRepository);
         http
                 .authenticationProvider(authenticationProvider)
-                .csrf(csrf -> csrf.csrfTokenRepository(new CookieCsrfTokenRepository()))
+                .csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository)
+                        .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .requestCache(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)

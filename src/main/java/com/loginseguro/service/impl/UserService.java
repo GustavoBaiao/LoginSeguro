@@ -14,6 +14,7 @@ import com.loginseguro.repository.IUserRepository;
 import com.loginseguro.service.IUserService;
 import com.loginseguro.service.ICurrentActorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -37,7 +38,7 @@ public class UserService implements IUserService {
         var email = normalizeEmail(userRequestDTO.email());
         validateEmailAvailability(email);
         var userEntity = prepareUserForCreation(userRequestDTO, email);
-        var user = save(userEntity);
+        var user = saveNewUser(userEntity);
         return toResponseDTO(user);
     }
 
@@ -110,6 +111,17 @@ public class UserService implements IUserService {
 
     private UserEntity save(UserEntity userEntity) {
         return userRepository.save(userEntity);
+    }
+
+    private UserEntity saveNewUser(UserEntity userEntity) {
+        try {
+            return userRepository.insert(userEntity);
+        } catch (DuplicateKeyException exception) {
+            if (userRepository.existsByEmail(userEntity.getEmail())) {
+                throw new EmailAlreadyExistsException();
+            }
+            throw exception;
+        }
     }
 
     private UserEntity toEntity(UserRequestDTO userRequestDTO) {

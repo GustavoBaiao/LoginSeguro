@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +29,7 @@ public class AuthPageController {
     private final IAuthService authService;
     private final IUserService userService;
     private final JwtCookieManager jwtCookieManager;
+    private final CookieCsrfTokenRepository csrfTokenRepository;
 
     @GetMapping("/login")
     public String showLogin(Model model, Authentication authentication) {
@@ -40,13 +42,15 @@ public class AuthPageController {
 
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute("loginRequestDTO") LoginRequestDTO requestDTO,
-                        BindingResult bindingResult, Model model, HttpServletResponse response) {
+                        BindingResult bindingResult, Model model, HttpServletRequest request,
+                        HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             return "auth/login";
         }
         try {
             var token = authService.login(requestDTO);
             jwtCookieManager.addCookie(token, response);
+            csrfTokenRepository.saveToken(null, request, response);
         } catch (AuthenticationException exception) {
             model.addAttribute("loginError", "Email ou senha inválidos");
             return "auth/login";
@@ -87,6 +91,7 @@ public class AuthPageController {
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         authService.logout(jwtCookieManager.readToken(request).orElse(null));
         jwtCookieManager.removeCookie(response);
+        csrfTokenRepository.saveToken(null, request, response);
         SecurityContextHolder.clearContext();
         return "redirect:/login?logout";
     }
